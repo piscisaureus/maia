@@ -1,0 +1,20 @@
+
+
+body { 
+  font-size: 62.5%; 
+}
+
+.template {
+  display: none;
+}
+
+table {
+  width: 100%;
+}
+
+span.warnings {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: transparent url(smoothness/images/ui-icons_cd0a0a_256x240.png) no-repeat 0px -144px ;
+}
