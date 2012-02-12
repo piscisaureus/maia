@@ -81,14 +81,15 @@ $(function() {
     }
     
     addMethods(model1, collection1, field1, model2, collection2, field2);
-    if (model1 !== model2) {
+    if (model1 !== model2 ||
+        collection1 !== collection2 ||
+        field1 !== field2) {
       addMethods(model2, collection2, field2, model1, collection1, field1);
     }
   }
 
   var BaseModel = Backbone.Model.extend({
     destroy: function() {
-        debugger;
       var handlers = this._destroyHandlers || [];
       for (i = 0; i < handlers.length; i++)
         this._destroyHandlers[i].call(this);
@@ -132,9 +133,22 @@ $(function() {
     }
   });
   
-  defineRelationship(Role, 'roles', 'links', Role, 'roles', 'links');
+  defineRelationship(Role, 'roles', 'institutions', Institution, 'institutions', 'roles');
+  defineRelationship(Role, 'roles', 'dependents', Role, 'roles', 'dependees');
   
-  window.Location = BaseModel.extend({
+  window.Agent = BaseModel.extend({
+    defaults: function() {
+      return {
+        id: generateId()
+      };
+    },
+	
+	warnings: function(){}
+  });
+  
+  defineRelationship(Agent, 'agents', 'roles', Role, 'roles', 'agents');
+   
+  window.Component = Backbone.Model.extend({
     defaults: function() {
       return {
         id: generateId(),
@@ -142,17 +156,55 @@ $(function() {
         y: Math.round(Math.random() * 1000)
       };
     },
+	
+	warnings: function(){}
   });
   
-  defineRelationship(Location, 'locations', 'dependencies', Location, 'locations', 'dependencies');
+  defineRelationship(Component, 'components', 'agents', Agent, 'agents', 'components');
+  defineRelationship(Component, 'components', 'composeds', Component, 'components', 'composees');
   
-  window.Resource = Backbone.Model.extend({
+  window.Action = Backbone.Model.extend({
     defaults: function() {
       return {
         id: generateId(),
       };
-    }
+    },
+    warnings: function(){}
   });
+  
+  defineRelationship(Role, 'roles', 'actions', Action, 'actions', 'roles');
+  defineRelationship(Component, 'components', 'actions', Action, 'actions', 'components');
+  defineRelationship(Institution, 'institutions', 'actions', Action, 'actions', 'institutions');
+  
+  defineRelationship(Role, 'roles', 'actions_as_body', Action, 'actions', 'body_roles');
+  defineRelationship(Component, 'components', 'actions_as_body', Action, 'actions', 'body_components');
+  defineRelationship(Agent, 'agents', 'actions_as_body', Action, 'actions', 'body_agents');
+  
+  window.ActionSituation = Backbone.Model.extend({
+    defaults: function() {
+      return {
+        id: generateId(),
+      };
+    },
+  	warnings: function(){}
+  });
+  
+  defineRelationship(ActionSituation, 'actionSituations', 'actions', Action, 'actions', 'actionSituation');  
+  defineRelationship(Role, 'roles', 'evaluation', ActionSituation, 'actionSituations', 'evaluation');
+  
+  window.RoleEnactment = Backbone.Model.extend({
+    defaults: function() {
+      return {
+        id: generateId(),
+      };
+    },
+	
+  	warnings: function(){}
+  });
+  
+  defineRelationship(RoleEnactment, 'roleEnactments', 'agent', Agent, 'agents', 'roleEnactments');
+  defineRelationship(RoleEnactment, 'roleEnactments', 'actionSituation', ActionSituation, 'actionSituations', 'roleEnactments');
+  defineRelationship(RoleEnactment, 'roleEnactments', 'role', Role, 'roles', 'roleEnactments');
 
   
   /* Collections */
@@ -166,14 +218,29 @@ $(function() {
     localStorage: new Store('role')
   });
 
-  window.LocationList = Backbone.Collection.extend({
-    model: Location,
-    localStorage: new Store('location')
+  window.AgentList = Backbone.Collection.extend({
+    model: Agent,
+    localStorage: new Store('agent')
   });
 
-  window.ResourceList = Backbone.Collection.extend({
-    model: Resource,
-    localStorage: new Store('resource')
+  window.ComponentList = Backbone.Collection.extend({
+    model: Component,
+    localStorage: new Store('component')
+  });
+  
+  window.RoleEnactmentList = Backbone.Collection.extend({
+    model: RoleEnactment,
+    localStorage: new Store('role_enactment')
+  });
+  
+  window.ActionList = Backbone.Collection.extend({
+    model: Action,
+    localStorage: new Store('action')
+  });
+  
+  window.ActionSituationList = Backbone.Collection.extend({
+    model: ActionSituation,
+    localStorage: new Store('action_situation')
   });
 
 });

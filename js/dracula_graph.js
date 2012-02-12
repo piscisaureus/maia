@@ -397,16 +397,25 @@ Graph.Renderer.Raphael.prototype = {
        });
        }
        
-       function bindScissors(scissors) {
+       function bindScissors(edge, scissors) {
          scissors.mouseover(function() {
            scissors.animate({"opacity": 1}, 200);
          });
          scissors.mouseout(function() {
            scissors.animate({"opacity": 0}, 200);
          });
-       }
-       edge.connection.scissors1 && bindScissors(edge.connection.scissors1);
-       edge.connection.scissors2 && bindScissors(edge.connection.scissors2);
+         scissors.click(function() {
+           self.graph.trigger('destroyedge', {
+             fromNode: edge.source,
+             toNode: edge.target,
+             fromId: edge.source.id,
+             toId: edge.source.id,
+             edge: edge.style
+           });
+         });
+       }         
+       edge.connection.scissors1 && bindScissors(edge, edge.connection.scissors1);
+       edge.connection.scissors2 && bindScissors(edge, edge.connection.scissors2);
     }
 };
 Graph.Layout = {};
