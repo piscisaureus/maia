@@ -1,4 +1,3 @@
-
 $(function() {
   window.roles = new RoleList();
   window.institutions = new InstitutionList();
@@ -9,7 +8,7 @@ $(function() {
   window.roleEnactments = new RoleEnactmentList();
   window.domainProblemVariables = new DomainProblemVariableList();
   window.validationVariables = new ValidationVariableList();
-  
+
   roles.fetch();
   institutions.fetch();
   agents.fetch();
