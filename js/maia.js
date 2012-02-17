@@ -6,6 +6,7 @@ $(function() {
   
   ComponentTableView.create();
   CompositionDiagramView.create();
+  ConnectionDiagramView.create();
   
   AgentTableView.create();
   
@@ -27,8 +28,7 @@ $(function() {
     show: function(structure) {
       $('.contentArea').hide();
       console.log(structure);
-      $('#' + (structure || 'institutional')).show();
-      console.log("aaa");
+      $('#' + (structure || 'intro')).show();
     }
   });
   new Workspace();

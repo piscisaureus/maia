@@ -103,7 +103,8 @@ $(function() {
       return {
         id: generateId(),
         x: Math.round(Math.random() * 1000),
-        y: Math.round(Math.random() * 1000)
+        y: Math.round(Math.random() * 1000),
+        deontic_type: 'none'
       };
     },
     
@@ -113,6 +114,20 @@ $(function() {
         "Something's wrong with this"
       ]
     },
+    
+    instititional_type: function() {
+      if (this.get('aim') && 
+          this.get('condition') && 
+          this.get('or_else') && 
+          this.get('deontic_type') !== 'none') {
+        return 'Rule'
+      }
+      if (this.get('deontic_type') === 'none' &&
+          !this.get('or_else')) {
+        return 'Shared strategy';
+      }
+      return 'Norm';
+    }
   });
     
 
@@ -162,6 +177,7 @@ $(function() {
   
   defineRelationship(Component, 'components', 'agents', Agent, 'agents', 'components');
   defineRelationship(Component, 'components', 'composeds', Component, 'components', 'composees');
+  defineRelationship(Component, 'components', 'connections', Component, 'components', 'connectees');
   
   window.Action = Backbone.Model.extend({
     defaults: function() {
@@ -176,10 +192,6 @@ $(function() {
   defineRelationship(Component, 'components', 'actions', Action, 'actions', 'components');
   defineRelationship(Institution, 'institutions', 'actions', Action, 'actions', 'institutions');
   
-  defineRelationship(Role, 'roles', 'actions_as_body', Action, 'actions', 'body_roles');
-  defineRelationship(Component, 'components', 'actions_as_body', Action, 'actions', 'body_components');
-  defineRelationship(Agent, 'agents', 'actions_as_body', Action, 'actions', 'body_agents');
-  
   window.ActionSituation = Backbone.Model.extend({
     defaults: function() {
       return {
@@ -188,9 +200,28 @@ $(function() {
     },
   	warnings: function(){}
   });
-  
+    
+  window.ValidationVariable = Backbone.Model.extend({
+    defaults: function() {
+      return {
+        id: generateId(),
+      };
+    },
+  	warnings: function(){}
+  });
+ 
+  window.DomainProblemVariable = Backbone.Model.extend({
+    defaults: function() {
+      return {
+        id: generateId(),
+      };
+    },
+  	warnings: function(){}
+  });
+ 
   defineRelationship(ActionSituation, 'actionSituations', 'actions', Action, 'actions', 'actionSituation');  
-  defineRelationship(Role, 'roles', 'evaluation', ActionSituation, 'actionSituations', 'evaluation');
+  defineRelationship(ValidationVariable, 'validationVariables', 'evaluation', ActionSituation, 'actionSituations', 'validationVariable');
+  defineRelationship(DomainProblemVariable, 'domainProblemVariables', 'evaluation', ActionSituation, 'actionSituations', 'domainProblemVariable');
   
   window.RoleEnactment = Backbone.Model.extend({
     defaults: function() {
@@ -241,6 +272,17 @@ $(function() {
   window.ActionSituationList = Backbone.Collection.extend({
     model: ActionSituation,
     localStorage: new Store('action_situation')
+  });
+  
+  
+  window.DomainProblemVariableList = Backbone.Collection.extend({
+    model: DomainProblemVariable,
+    localStorage: new Store('domain_problem_variable')
+  });
+
+  window.ValidationVariableList = Backbone.Collection.extend({
+    model: ValidationVariable,
+    localStorage: new Store('validation_variable')
   });
 
 });

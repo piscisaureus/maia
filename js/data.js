@@ -7,6 +7,8 @@ $(function() {
   window.actionSituations = new ActionSituationList();
   window.actions = new ActionList();
   window.roleEnactments = new RoleEnactmentList();
+  window.domainProblemVariables = new DomainProblemVariableList();
+  window.validationVariables = new ValidationVariableList();
   
   roles.fetch();
   institutions.fetch();
@@ -15,4 +17,6 @@ $(function() {
   actionSituations.fetch();
   actions.fetch();
   roleEnactments.fetch();
+  domainProblemVariables.fetch();
+  validationVariables.fetch();
 });
