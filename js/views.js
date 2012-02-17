@@ -518,7 +518,7 @@ $(function() {
     
     _updateWarnings: function() {
       var warnings = this.model.warnings();
-      if (!warnings) {
+      if (!warnings || !warnings.length) {
         $(this.warningsEl).hide();
         $(this.warningsEl).off();
       } else {

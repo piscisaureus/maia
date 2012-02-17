@@ -97,6 +97,12 @@ $(function() {
     } 
   });
   
+  function checkLabel(model, warnings) {
+    var label = (model.get('label') || '').replace(/^\s+|\s+$/g, '');
+    if (!label) return warnings.push('The label field cannot be empty');
+    if (/\W/.test(label)) return warnings.push('Label is not a valid identifier');
+  }
+  
   /* Instance models */
   window.Institution = BaseModel.extend({
     defaults: function() {
@@ -109,10 +115,9 @@ $(function() {
     },
     
     warnings: function() {
-      if (Math.random() < .5) return false;
-      return [
-        "Something's wrong with this"
-      ]
+      var warnings = [];
+      checkLabel(this, warnings);
+      return warnings;
     },
     
     instititional_type: function() {
@@ -141,11 +146,10 @@ $(function() {
     },
     
     warnings: function() {
-      if (Math.random() < .5) return false;
-      return [
-        "Something's wrong with this"
-      ]
-    }
+      var warnings = [];
+      checkLabel(this, warnings);
+      return warnings;
+    },
   });
   
   defineRelationship(Role, 'roles', 'institutions', Institution, 'institutions', 'roles');
@@ -158,7 +162,11 @@ $(function() {
       };
     },
 	
-	warnings: function(){}
+	  warnings: function() {
+      var warnings = [];
+      checkLabel(this, warnings);
+      return warnings;
+    },
   });
   
   defineRelationship(Agent, 'agents', 'roles', Role, 'roles', 'agents');
@@ -172,7 +180,11 @@ $(function() {
       };
     },
 	
-	warnings: function(){}
+    warnings: function() {
+      var warnings = [];
+      checkLabel(this, warnings);
+      return warnings;
+    },
   });
   
   defineRelationship(Component, 'components', 'agents', Agent, 'agents', 'components');
@@ -198,7 +210,12 @@ $(function() {
         id: generateId(),
       };
     },
-  	warnings: function(){}
+    
+  	warnings: function() {
+      var warnings = [];
+      checkLabel(this, warnings);
+      return warnings;
+    },
   });
     
   window.ValidationVariable = Backbone.Model.extend({
@@ -207,7 +224,11 @@ $(function() {
         id: generateId(),
       };
     },
-  	warnings: function(){}
+  	warnings: function() {
+      var warnings = [];
+      checkLabel(this, warnings);
+      return warnings;
+    },
   });
  
   window.DomainProblemVariable = Backbone.Model.extend({
@@ -216,7 +237,11 @@ $(function() {
         id: generateId(),
       };
     },
-  	warnings: function(){}
+  	warnings: function() {
+      var warnings = [];
+      checkLabel(this, warnings);
+      return warnings;
+    },
   });
  
   defineRelationship(ActionSituation, 'actionSituations', 'actions', Action, 'actions', 'actionSituation');  
