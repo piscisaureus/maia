@@ -92,7 +92,7 @@ $(function() {
     var listNode = xml.push(parent, tagName);
     for (var id in map) {
       if (map.hasOwnProperty(id)) {
-        var node = xml.push(listNode, itemTagName, {id: id});
+        var node = xml.push(listNode, itemTagName, {id: xml.mapId(id)});
         var attributes = map[id];
         for (var key in attributes) {
           if (attributes.hasOwnProperty(key)) {
@@ -107,7 +107,7 @@ $(function() {
     var node = xml.push(parent, tagName);
     for (var id in map) {
       if (map.hasOwnProperty(id)) {
-        xml.setAttr(node, { id: id });
+        xml.setAttr(node, { id: xml.mapId(id) });
       }
     }
   }
@@ -171,7 +171,7 @@ $(function() {
     },
     
     toXML: function(xml, parent) {
-      var node = xml.push(parent, 'institution', { id: this.get('id') });
+      var node = xml.push(parent, 'role', { id: xml.mapId(this.get('id')) });
       xml.push(node, 'label', {}, this.get('label'));
       relationsToXML(xml, node, 'attributes', 'role', this.get('roles'));
       xml.push(node, 'deontic_type', {}, this.get('deontic_type'));
@@ -198,7 +198,7 @@ $(function() {
     },
     
     toXML: function(xml, parent) {
-      var node = xml.push(parent, 'role', { id: this.get('id') });
+      var node = xml.push(parent, 'role', { id: xml.mapId(this.get('id')) });
       xml.push(node, 'label', {}, this.get('label'));
       xml.push(node, 'objective', {}, this.get('objective'));
       listToXML(xml, node, 'sub_objectives', 'sub_objective', this.get('sub_objectives'));
@@ -226,7 +226,7 @@ $(function() {
     },
     
     toXML: function(xml, parent) {
-      var node = xml.push(parent, 'agent', { id: this.get('id') });
+      var node = xml.push(parent, 'agent', { id: xml.mapId(this.get('id')) });
       xml.push(node, 'label', {}, this.get('label'));
       listToXML(xml, node, 'properties', 'property', this.get('properties'));
       listToXML(xml, node, 'personal_values', 'personal_value', this.get('personal_values'));
@@ -258,7 +258,7 @@ $(function() {
     },
     
     toXML: function(xml, parent) {
-      var node = xml.push(parent, 'component', { id: this.get('id') });
+      var node = xml.push(parent, 'component', { id: xml.mapId(this.get('id')) });
       xml.push(node, 'label', {}, this.get('label'));
       listToXML(xml, node, 'properties', 'property', this.get('properties'));
       xml.push(node, 'type', {}, this.get('type'));
@@ -284,7 +284,7 @@ $(function() {
     },
     
     toXML: function(xml, parent) {
-      var node = xml.push(parent, 'action', { id: this.get('id') });
+      var node = xml.push(parent, 'action', { id: xml.mapId(this.get('id')) });
       firstRelationToXML(xml, node, "action_situation", this.get('action_situation'));
       relationsToXML(xml, node, 'roles', 'role', this.get('roles'));
       xml.push(node, 'action_body', {}, this.get('body'));
@@ -313,7 +313,7 @@ $(function() {
     },
     
     toXML: function(xml, parent) {
-      var node = xml.push(parent, 'action_situation', { id: this.get('id') });
+      var node = xml.push(parent, 'action_situation', { id: xml.mapId(this.get('id')) });
       xml.push(node, 'label', {}, this.get('label'));
     }
   });
@@ -331,7 +331,7 @@ $(function() {
     },
     
     toXML: function(xml, parent) {
-      var node = xml.push(parent, 'validation_variable', { id: this.get('id') });
+      var node = xml.push(parent, 'validation_variable', { id: xml.mapId(this.get('id')) });
       xml.push(node, 'label', {}, this.get('label'));
       relationsToXML(xml, node, 'action_situations', 'action_situation', this.get('evaluation'));
     }
@@ -350,7 +350,7 @@ $(function() {
     },
     
     toXML: function(xml, parent) {
-      var node = xml.push(parent, 'domain_problem_variable', { id: this.get('id') });
+      var node = xml.push(parent, 'domain_problem_variable', { id: xml.mapId(this.get('id')) });
       xml.push(node, 'label', {}, this.get('label'));
       relationsToXML(xml, node, 'action_situations', 'action_situation', this.get('evaluation'));
     }
@@ -371,7 +371,7 @@ $(function() {
     },
     
     toXML: function(xml, parent) {
-      var node = xml.push(parent, 'role_enactment', { id: this.get('id') });
+      var node = xml.push(parent, 'role_enactment', { id: xml.mapId(this.get('id')) });
       firstRelationToXML(xml, node, "agent", this.get('agent'));
       firstRelationToXML(xml, node, "action_situation", this.get('action_situation'));
       firstRelationToXML(xml, node, "role", this.get('role'));
