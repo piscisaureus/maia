@@ -17,8 +17,9 @@ $(function() {
 
   (new ScopeMatrixView());
   
-  // Bind export butten
-  $('#exportxml').click(exportXML);
+  // Bind export buttons
+  $('#exportxml').click(function() { exportXML(false); });
+  $('#exportxmldownload').click(function() { exportXML(true); });
 
   // Set up backbone router
   var Workspace = Backbone.Router.extend({
