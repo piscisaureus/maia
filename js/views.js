@@ -92,6 +92,43 @@ $(function() {
     }
   });
 
+  window.MultipleTextInput = Widget.extend({
+    template: '<input type="text" />',
+
+    _bind: function() {
+      $(this.el).change(this._triggerChange);
+      this.model.bind('change:' + this.field, this.update);
+    },
+
+    _unbind: function() {
+      this.model.unbind('change:' + this.field, this.update);
+    },
+
+    update: function() {
+      var value = this.model.get(this.field);
+      if (!value) {
+        value = '';
+      } else if (value instanceof Array) {
+        value = value.join(', ');
+      }
+      $(this.el).val(value);
+    },
+
+    save: function() {
+      var value = $(this.el).val();
+      var array = value.split(/[;,]/);
+      for (var i = array.length - 1; i >= 0; i--) {
+        var item = (array[i] + '').replace(/^\s+|\s+$/g, '');
+        if (!item) {
+          array.splice(i, 1);
+        } else {
+          array[i] = item;
+        }
+      }
+      this.model.save(kv(this.field, array));
+    }
+  });
+
   window.Select = Widget.extend({
     render: function() {
       this.el = $('<select />').attr({
@@ -355,7 +392,10 @@ $(function() {
         var source = sources[i];
 
         this._getOptionCollection(source.optionCollection).each(function(model) {
-          var values = (model.get(source.optionField) || '').split(/[,;]/);
+          var values = (model.get(source.optionField) || []);
+          if (!(values instanceof Array)) {
+            values = [values]; 
+          }
           for (var i = 0; i < values.length; i++) {
             var value = values[i].replace(/^\s+|\s+$/g, '');
             if (!value) continue;
@@ -886,7 +926,7 @@ $(function() {
     })
   }, {
     label: 'Sub-objectives\u00b9',
-    widget: TextInput.extend({
+    widget: MultipleTextInput.extend({
       field: 'sub_objectives'
     })
   }, {
@@ -900,12 +940,12 @@ $(function() {
     })
   }, {
     label: 'Entr\u00b9e conditions\u00b9',
-    widget: TextInput.extend({
+    widget: MultipleTextInput.extend({
       field: 'entry_conditions'
     })
   }, {
     label: 'Institutional capabilities\u00b9',
-    widget: TextInput.extend({
+    widget: MultipleTextInput.extend({
       field: 'institutional_capabilities'
     })
   }, ]);
@@ -964,12 +1004,12 @@ $(function() {
     })
   }, {
     label: 'Properties\u00b9',
-    widget: TextInput.extend({
+    widget: MultipleTextInput.extend({
       field: 'properties'
     })
   }, {
     label: 'Personal values\u00b9',
-    widget: TextInput.extend({
+    widget: MultipleTextInput.extend({
       field: 'personal_values'
     })
   }, {
@@ -997,12 +1037,12 @@ $(function() {
     })
   }, {
     label: 'Intrinsic capabilities\u00b9',
-    widget: TextInput.extend({
+    widget: MultipleTextInput.extend({
       field: 'intrinsic_capability'
     })
   }, {
     label: 'Decision making criteria\u00b9',
-    widget: TextInput.extend({
+    widget: MultipleTextInput.extend({
       field: 'decision_making_behavior'
     })
   }, ]);
@@ -1014,7 +1054,7 @@ $(function() {
     })
   }, {
     label: 'Properties\u00b9',
-    widget: TextInput.extend({
+    widget: MultipleTextInput.extend({
       field: 'properties'
     })
   }, {
@@ -1028,7 +1068,7 @@ $(function() {
     })
   }, {
     label: 'Behaviors\u00b9',
-    widget: TextInput.extend({
+    widget: MultipleTextInput.extend({
       field: 'behaviors'
     })
   }, ]);
