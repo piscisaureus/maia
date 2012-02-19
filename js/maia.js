@@ -16,7 +16,9 @@ $(function() {
   (new RealityClosenessMatrixView());
 
   (new ScopeMatrixView());
-
+  
+  // Bind export butten
+  $('#exportxml').click(exportXML);
 
   // Set up backbone router
   var Workspace = Backbone.Router.extend({
@@ -27,7 +29,7 @@ $(function() {
     show: function(structure) {
       $('.contentArea').hide();
       console.log(structure);
-      $('#' + (structure || 'intro')).show();
+      $('#' + (structure || 'about')).show();
     }
   });
   new Workspace();
