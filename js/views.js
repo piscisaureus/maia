@@ -939,7 +939,7 @@ $(function() {
       newDialog: 'InstitutionDialogView'
     })
   }, {
-    label: 'Entr\u00b9e conditions\u00b9',
+    label: 'Entr\u00e9e conditions\u00b9',
     widget: MultipleTextInput.extend({
       field: 'entry_conditions'
     })
@@ -1083,7 +1083,7 @@ $(function() {
   generateViews('action', [{
     label: 'Action situation',
     widget: RemoteSelect.extend({
-      field: 'actionSituation',
+      field: 'action_situation',
       optionCollection: 'actionSituations',
       optionLabelField: 'label',
       multiple: false,
@@ -1140,7 +1140,7 @@ $(function() {
   }, {
     label: 'Postcondition',
     widget: TextInput.extend({
-      field: 'precondition'
+      field: 'postcondition'
     })
   }, ]);
 
@@ -1155,7 +1155,7 @@ $(function() {
   }, {
     label: 'Action',
     widget: RemoteSelect.extend({
-      field: 'actionSituation',
+      field: 'action_situation',
       optionCollection: 'actionSituations',
       optionLabelField: 'label',
       multiple: false

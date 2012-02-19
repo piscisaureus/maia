@@ -87,6 +87,42 @@ $(function() {
       addMethods(model2, collection2, field2, model1, collection1, field1);
     }
   }
+  
+  function relationsToXML(xml, parent, tagName, itemTagName, map) {
+    var listNode = xml.push(parent, tagName);
+    for (var id in map) {
+      if (map.hasOwnProperty(id)) {
+        var node = xml.push(listNode, itemTagName, {id: id});
+        var attributes = map[id];
+        for (var key in attributes) {
+          if (attributes.hasOwnProperty(key)) {
+             xml.push(node, key, {}, attributes[key]);
+          }
+        }
+      }
+    }
+  }
+  
+  function firstRelationToXML(xml, parent, tagName, map) {
+    var node = xml.push(parent, tagName);
+    for (var id in map) {
+      if (map.hasOwnProperty(id)) {
+        xml.setAttr(node, { id: id });
+      }
+    }
+  }
+  
+  function listToXML(xml, parent, tagName, itemTagName, items) {
+    var listNode = xml.push(parent, tagName);
+    if (!items) {
+      items = [];
+    } else if (!(items instanceof Array)) {
+      items = [items];
+    }
+    for (var i = 0; i < items.length; i++) {
+      xml.push(listNode, itemTagName, {}, items[i]);
+    }
+  }
 
   var BaseModel = Backbone.Model.extend({
     destroy: function() {
@@ -132,6 +168,16 @@ $(function() {
         return 'Shared strategy';
       }
       return 'Norm';
+    },
+    
+    toXML: function(xml, parent) {
+      var node = xml.push(parent, 'institution', { id: this.get('id') });
+      xml.push(node, 'label', {}, this.get('label'));
+      relationsToXML(xml, node, 'attributes', 'role', this.get('roles'));
+      xml.push(node, 'deontic_type', {}, this.get('deontic_type'));
+      xml.push(node, 'aim', {}, this.get('aim'));
+      xml.push(node, 'condition', {}, this.get('condition'));
+      xml.push(node, 'or_else', {}, this.get('or_else'));
     }
   });
 
@@ -150,6 +196,17 @@ $(function() {
       checkLabel(this, warnings);
       return warnings;
     },
+    
+    toXML: function(xml, parent) {
+      var node = xml.push(parent, 'role', { id: this.get('id') });
+      xml.push(node, 'label', {}, this.get('label'));
+      xml.push(node, 'objective', {}, this.get('objective'));
+      listToXML(xml, node, 'sub_objectives', 'sub_objective', this.get('sub_objectives'));
+      relationsToXML(xml, node, 'institutions', 'institution', this.get('institutions'));
+      listToXML(xml, node, 'entry_conditions', 'entry_condition', this.get('entry_conditions'));
+      listToXML(xml, node, 'institutional_capabilities', 'institutional_capabilitity', this.get('institutional_capabilities'));
+      relationsToXML(xml, node, 'dependencies', 'role', this.get('dependees'));
+    }
   });
 
   defineRelationship(Role, 'roles', 'institutions', Institution, 'institutions', 'roles');
@@ -167,6 +224,18 @@ $(function() {
       checkLabel(this, warnings);
       return warnings;
     },
+    
+    toXML: function(xml, parent) {
+      var node = xml.push(parent, 'agent', { id: this.get('id') });
+      xml.push(node, 'label', {}, this.get('label'));
+      listToXML(xml, node, 'properties', 'property', this.get('properties'));
+      listToXML(xml, node, 'personal_values', 'personal_value', this.get('personal_values'));
+      xml.push(node, 'information', {}, this.get('information'));
+      relationsToXML(xml, node, 'physical_components', 'component', this.get('components'));
+      relationsToXML(xml, node, 'possible_roles', 'role', this.get('roles'));
+      listToXML(xml, node, 'intrinsic_capabilities', 'intrinsic_capability', this.get('intrinsic_capability'));
+      listToXML(xml, node, 'decision_making_criteria', 'decision_making_criterium', this.get('decision_making_behavior'));
+    }
   });
 
   defineRelationship(Agent, 'agents', 'roles', Role, 'roles', 'agents');
@@ -187,6 +256,16 @@ $(function() {
       checkLabel(this, warnings);
       return warnings;
     },
+    
+    toXML: function(xml, parent) {
+      var node = xml.push(parent, 'component', { id: this.get('id') });
+      xml.push(node, 'label', {}, this.get('label'));
+      listToXML(xml, node, 'properties', 'property', this.get('properties'));
+      xml.push(node, 'type', {}, this.get('type'));
+      listToXML(xml, node, 'behaviors', 'behavior', this.get('behaviors'));
+      relationsToXML(xml, node, 'connections', 'component', this.get('connections'));
+      relationsToXML(xml, node, 'composition', 'component', this.get('composeds'));
+    }
   });
 
   defineRelationship(Component, 'components', 'agents', Agent, 'agents', 'components');
@@ -199,7 +278,21 @@ $(function() {
         id: generateId(),
       };
     },
-    warnings: function() {}
+
+    warnings: function() {
+      return [];
+    },
+    
+    toXML: function(xml, parent) {
+      var node = xml.push(parent, 'action', { id: this.get('id') });
+      firstRelationToXML(xml, node, "action_situation", this.get('action_situation'));
+      relationsToXML(xml, node, 'roles', 'role', this.get('roles'));
+      xml.push(node, 'action_body', {}, this.get('body'));
+      relationsToXML(xml, node, 'physical_components', 'component', this.get('components'));
+      relationsToXML(xml, node, 'institutional_statement', 'institution', this.get('institutions'));
+      xml.push(node, 'precondition', {}, this.get('precondition'));
+      xml.push(node, 'postcondition', {}, this.get('postcondition'));
+    }
   });
 
   defineRelationship(Role, 'roles', 'actions', Action, 'actions', 'roles');
@@ -218,6 +311,11 @@ $(function() {
       checkLabel(this, warnings);
       return warnings;
     },
+    
+    toXML: function(xml, parent) {
+      var node = xml.push(parent, 'action_situation', { id: this.get('id') });
+      xml.push(node, 'label', {}, this.get('label'));
+    }
   });
 
   window.ValidationVariable = BaseModel.extend({
@@ -231,6 +329,12 @@ $(function() {
       checkLabel(this, warnings);
       return warnings;
     },
+    
+    toXML: function(xml, parent) {
+      var node = xml.push(parent, 'validation_variable', { id: this.get('id') });
+      xml.push(node, 'label', {}, this.get('label'));
+      relationsToXML(xml, node, 'action_situations', 'action_situation', this.get('evaluation'));
+    }
   });
 
   window.DomainProblemVariable = BaseModel.extend({
@@ -244,11 +348,17 @@ $(function() {
       checkLabel(this, warnings);
       return warnings;
     },
+    
+    toXML: function(xml, parent) {
+      var node = xml.push(parent, 'domain_problem_variable', { id: this.get('id') });
+      xml.push(node, 'label', {}, this.get('label'));
+      relationsToXML(xml, node, 'action_situations', 'action_situation', this.get('evaluation'));
+    }
   });
 
-  defineRelationship(ActionSituation, 'actionSituations', 'actions', Action, 'actions', 'actionSituation');
-  defineRelationship(ValidationVariable, 'validationVariables', 'evaluation', ActionSituation, 'actionSituations', 'validationVariable');
-  defineRelationship(DomainProblemVariable, 'domainProblemVariables', 'evaluation', ActionSituation, 'actionSituations', 'domainProblemVariable');
+  defineRelationship(ActionSituation, 'actionSituations', 'actions', Action, 'actions', 'action_situation');
+  defineRelationship(ValidationVariable, 'validationVariables', 'evaluation', ActionSituation, 'actionSituations', 'validation_variable');
+  defineRelationship(DomainProblemVariable, 'domainProblemVariables', 'evaluation', ActionSituation, 'actionSituations', 'domain_problem_variable');
 
   window.RoleEnactment = BaseModel.extend({
     defaults: function() {
@@ -257,18 +367,26 @@ $(function() {
       };
     },
 
-    warnings: function() {}
+    warnings: function() {
+    },
+    
+    toXML: function(xml, parent) {
+      var node = xml.push(parent, 'role_enactment', { id: this.get('id') });
+      firstRelationToXML(xml, node, "agent", this.get('agent'));
+      firstRelationToXML(xml, node, "action_situation", this.get('action_situation'));
+      firstRelationToXML(xml, node, "role", this.get('role'));
+    }  
   });
 
-  defineRelationship(RoleEnactment, 'roleEnactments', 'agent', Agent, 'agents', 'roleEnactments');
-  defineRelationship(RoleEnactment, 'roleEnactments', 'actionSituation', ActionSituation, 'actionSituations', 'roleEnactments');
-  defineRelationship(RoleEnactment, 'roleEnactments', 'role', Role, 'roles', 'roleEnactments');
+  defineRelationship(RoleEnactment, 'roleEnactments', 'agent', Agent, 'agents', 'role_enactments');
+  defineRelationship(RoleEnactment, 'roleEnactments', 'action_situation', ActionSituation, 'actionSituations', 'role_enactments');
+  defineRelationship(RoleEnactment, 'roleEnactments', 'role', Role, 'roles', 'role_enactments');
 
 
   /* Collections */
-  window.InstitutionList = Backbone.Collection.extend({
-    model: Institution,
-    localStorage: new Store('institution')
+  window.AgentList = Backbone.Collection.extend({
+    model: Agent,
+    localStorage: new Store('agent')
   });
 
   window.RoleList = Backbone.Collection.extend({
@@ -276,9 +394,9 @@ $(function() {
     localStorage: new Store('role')
   });
 
-  window.AgentList = Backbone.Collection.extend({
-    model: Agent,
-    localStorage: new Store('agent')
+  window.InstitutionList = Backbone.Collection.extend({
+    model: Institution,
+    localStorage: new Store('institution')
   });
 
   window.ComponentList = Backbone.Collection.extend({
@@ -286,9 +404,9 @@ $(function() {
     localStorage: new Store('component')
   });
 
-  window.RoleEnactmentList = Backbone.Collection.extend({
-    model: RoleEnactment,
-    localStorage: new Store('role_enactment')
+  window.ActionSituationList = Backbone.Collection.extend({
+    model: ActionSituation,
+    localStorage: new Store('action_situation')
   });
 
   window.ActionList = Backbone.Collection.extend({
@@ -296,15 +414,9 @@ $(function() {
     localStorage: new Store('action')
   });
 
-  window.ActionSituationList = Backbone.Collection.extend({
-    model: ActionSituation,
-    localStorage: new Store('action_situation')
-  });
-
-
-  window.DomainProblemVariableList = Backbone.Collection.extend({
-    model: DomainProblemVariable,
-    localStorage: new Store('domain_problem_variable')
+  window.RoleEnactmentList = Backbone.Collection.extend({
+    model: RoleEnactment,
+    localStorage: new Store('role_enactment')
   });
 
   window.ValidationVariableList = Backbone.Collection.extend({
@@ -312,4 +424,8 @@ $(function() {
     localStorage: new Store('validation_variable')
   });
 
+  window.DomainProblemVariableList = Backbone.Collection.extend({
+    model: DomainProblemVariable,
+    localStorage: new Store('domain_problem_variable')
+  });
 });
