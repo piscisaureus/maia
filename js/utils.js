@@ -1,5 +1,5 @@
 function generateId() {
-  return Math.floor(Math.random() * 1e9);
+  return Math.floor(Math.random() * 1e18);
 }
 
 function kv(key, value) {
