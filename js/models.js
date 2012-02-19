@@ -136,8 +136,8 @@ $(function() {
     defaults: function() {
       return {
         id: generateId(),
-        x: Math.round(Math.random() * 1000),
-        y: Math.round(Math.random() * 1000),
+        dependencies_x: Math.round(Math.random() * 1000),
+        dependencies_y: Math.round(Math.random() * 1000),
       };
     },
 
@@ -171,8 +171,10 @@ $(function() {
     defaults: function() {
       return {
         id: generateId(),
-        x: Math.round(Math.random() * 1000),
-        y: Math.round(Math.random() * 1000)
+        composition_x: Math.round(Math.random() * 1000),
+        composition_y: Math.round(Math.random() * 1000),
+        connections_x: Math.round(Math.random() * 1000),
+        connections_y: Math.round(Math.random() * 1000)
       };
     },
 
