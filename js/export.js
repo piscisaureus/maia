@@ -56,7 +56,6 @@ function XMLHelper() {
         pushJson(node, itemTagName, json[i]);
       }
    } else if (json && typeof json === 'object') {
-      node = push(parent, tagName);
       for (var key in json) {
         if (json.hasOwnProperty(key)) {
           if (/(^|_)id$/.test(key)) {
