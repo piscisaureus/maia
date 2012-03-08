@@ -75,7 +75,6 @@ $(function() {
         structure = 'about';
       }
       $('.contentArea').hide();
-      console.log(structure);
       $('#' + (structure || 'about')).show();
     }
   });
