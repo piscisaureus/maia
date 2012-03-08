@@ -43,7 +43,7 @@ $(function() {
   (new RealityClosenessMatrixView());
 
   (new ScopeMatrixView());
-  
+
   // Bind export buttons
   $('#exportxml').click(function() { exportXML(false); });
   $('#exportxmldownload').click(function() { exportXML(true); });

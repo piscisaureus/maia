@@ -223,7 +223,7 @@ $(function() {
   });
 
   window.RemoteSelect = Widget.extend({
-/* 
+/*
      * Options:
      * - model
      * - field
@@ -394,7 +394,7 @@ $(function() {
         this._getOptionCollection(source.optionCollection).each(function(model) {
           var values = (model.get(source.optionField) || []);
           if (!(values instanceof Array)) {
-            values = [values]; 
+            values = [values];
           }
           for (var i = 0; i < values.length; i++) {
             var value = values[i].replace(/^\s+|\s+$/g, '');
@@ -720,11 +720,11 @@ $(function() {
     collection: 'roles',
     definition: roleDefinition
   });
-  
+
   window.RoleRowView2 = RowView2.extend({
     definition: roleDefinition
   });
-  
+
   window.RoleTableView2 = TableView2.extend({
     parent: $('#roles2'),
     rowView: RowView2,
