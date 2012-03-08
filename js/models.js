@@ -382,6 +382,16 @@ $(function() {
   defineRelationship(RoleEnactment, 'roleEnactments', 'action_situation', ActionSituation, 'actionSituations', 'role_enactments');
   defineRelationship(RoleEnactment, 'roleEnactments', 'role', Role, 'roles', 'role_enactments');
 
+  window.SaveInfo = BaseModel.extend({
+    defaults: function() {
+      return {
+        id: 0,
+        description: '',
+        email: ''
+      };
+    }
+  });
+
 
   /* Collections */
   window.AgentList = Backbone.Collection.extend({
@@ -427,5 +437,10 @@ $(function() {
   window.DomainProblemVariableList = Backbone.Collection.extend({
     model: DomainProblemVariable,
     localStorage: new Store('domain_problem_variable')
+  });
+
+  window.SaveInfoList = Backbone.Collection.extend({
+    model: SaveInfo,
+    localStorage: new Store('save_info')
   });
 });

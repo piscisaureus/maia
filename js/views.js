@@ -1169,6 +1169,22 @@ $(function() {
       multiple: false
     })
   }, ]);
+
+  window.SaveDialogView = DialogView2.extend({
+    title: 'Save model',
+    collection: saveInfos,
+    definition: [{
+      label: 'E-mail address (required)',
+      widget: TextInput.extend({
+        field: 'email'
+      })
+    }, {
+      label: 'Description',
+      widget: TextInput.extend({
+        field: 'description'
+      })
+    }]
+  });
 });
 
 $(function() {
