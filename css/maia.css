@@ -1,0 +1,142 @@
+
+
+body { 
+  font-size: 62.5%; 
+}
+
+.template {
+  display: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td > input {
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+td > select.multi-select {
+  width: auto;
+}
+
+th.input-column {
+  min-width: 150px;
+}
+
+table td, table th {
+  border: 0;
+  text-align: left;
+  padding: 4px;
+  vertical-align: center;
+}
+
+span.warnings {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: transparent url(smoothness/images/ui-icons_cd0a0a_256x240.png) no-repeat 0px -144px;
+}
+
+a.delete {
+  display: block;
+  width: 16px;
+  height: 16px;
+  text-decoration: none;
+  background: transparent url(smoothness/images/ui-icons_222222_256x240.png) no-repeat -176px -96px;
+}
+
+table tr th.warnings, table tr td.warnings,
+table tr th.delete, table tr td.delete {
+  width: 16px;
+}
+
+table.matrix td {
+  text-align: center;
+  font-size: 11px;
+}
+
+table.matrix th {
+  text-align: left;
+  font-size: 11px;
+}
+
+table.striped > tbody > tr.even > td,
+table.striped > tbody > tr.even > th {
+  background-color: #EDE7DC;
+  border: 1px solid #EDE7DC;
+}
+
+table.striped > tbody > tr.odd > td,
+table.striped > tbody > tr.odd > th {
+  background-color: white;
+  border: 1px solid white;
+}
+
+table.striped > thead > tr > td,
+table.striped > thead > tr > th {
+  background-color: #A3C6E0;
+  color: white;
+  font-size: 11px;
+}
+
+table.nested {
+  font-size: 10px;
+  width: 100%;
+}
+
+tr.even table.nested,
+tr.even table.nested {
+  border: 1px solid white;
+}
+
+tr.odd table.nested,
+tr.odd table.nested,
+table.form table.nested {
+  border: 1px solid #ccc;
+}
+
+table.nested th, 
+table.nested td {
+  border: auto;
+}
+
+tr.new-item a {
+  font-size: 11px;
+}
+
+table.form {
+  color: #A08950;
+}
+
+table.form > tbody > tr > th {
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+table.form {
+  border-collapse: collapse;
+  margin-bottom: 1em;
+}
+
+table.form > tbody > tr > th {
+  background: #A3C6E0;
+  color: white;
+  padding: 4px 6px;
+  border-top: 2px solid white;
+  width: 1%;
+}
+
+.contentright ul {
+  padding: 0 0 0 2em;
+}
+.contentright ul li {
+  margin: 0 0 5px 0;
+}
+
+p.footnote {
+   margin: 0;
+   padding: 0 0 0 30px;
+}
