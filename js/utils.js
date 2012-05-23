@@ -1,4 +1,3 @@
-
 function generateId() {
   return Math.floor(Math.random() * 1e9);
 }
