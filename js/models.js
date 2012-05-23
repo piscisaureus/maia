@@ -94,6 +94,10 @@ $(function() {
       for (i = 0; i < handlers.length; i++)
       this._destroyHandlers[i].call(this);
       return Backbone.Model.prototype.destroy.call(this);
+    },
+    
+    toXML: function(xml, parent) {
+      xml.pushJson(parent, 'model', this.toJSON());
     }
   });
 
@@ -167,7 +171,7 @@ $(function() {
 
   defineRelationship(Agent, 'agents', 'roles', Role, 'roles', 'agents');
 
-  window.Component = Backbone.Model.extend({
+  window.Component = BaseModel.extend({
     defaults: function() {
       return {
         id: generateId(),
@@ -189,7 +193,7 @@ $(function() {
   defineRelationship(Component, 'components', 'composeds', Component, 'components', 'composees');
   defineRelationship(Component, 'components', 'connections', Component, 'components', 'connectees');
 
-  window.Action = Backbone.Model.extend({
+  window.Action = BaseModel.extend({
     defaults: function() {
       return {
         id: generateId(),
@@ -202,7 +206,7 @@ $(function() {
   defineRelationship(Component, 'components', 'actions', Action, 'actions', 'components');
   defineRelationship(Institution, 'institutions', 'actions', Action, 'actions', 'institutions');
 
-  window.ActionSituation = Backbone.Model.extend({
+  window.ActionSituation = BaseModel.extend({
     defaults: function() {
       return {
         id: generateId(),
@@ -216,7 +220,7 @@ $(function() {
     },
   });
 
-  window.ValidationVariable = Backbone.Model.extend({
+  window.ValidationVariable = BaseModel.extend({
     defaults: function() {
       return {
         id: generateId(),
@@ -229,7 +233,7 @@ $(function() {
     },
   });
 
-  window.DomainProblemVariable = Backbone.Model.extend({
+  window.DomainProblemVariable = BaseModel.extend({
     defaults: function() {
       return {
         id: generateId(),
@@ -246,7 +250,7 @@ $(function() {
   defineRelationship(ValidationVariable, 'validationVariables', 'evaluation', ActionSituation, 'actionSituations', 'validationVariable');
   defineRelationship(DomainProblemVariable, 'domainProblemVariables', 'evaluation', ActionSituation, 'actionSituations', 'domainProblemVariable');
 
-  window.RoleEnactment = Backbone.Model.extend({
+  window.RoleEnactment = BaseModel.extend({
     defaults: function() {
       return {
         id: generateId(),

@@ -1,0 +1,44 @@
+<html>
+<script>
+  var NS = 'http://eeni.tbm.tudelft.nl/maia';
+  var doc = document.implementation.createDocument(NS, 'xml', null);
+  var root = doc.createElementNS(NS, 'model');
+  doc.documentElement.appendChild(root);
+  
+  function setAttr(el, attrs) {
+    for (var key in attrs) {
+      if (attrs.hasOwnProperty(key)) {
+        el.setAttribute(key, attrs[key]);
+      }
+    }
+    return el;
+  }
+  
+  function setText(el, text) {
+    if ((text && typeof text === 'string') || typeof text === 'number') {
+      var node = doc.createTextNode(text);
+      el.appendChild(node);
+    }
+    return el;
+  }
+  
+  function push(parent, tagName, attrs, text) {
+    var el = doc.createElementNS(NS, tagName);
+    parent.appendChild(el);
+    attrs && setAttr(el, attrs);
+    text && setText(el, text);
+    return el;
+  }
+  
+  function serialize() {
+    var serializer = new XMLSerializer();
+    return serializer.serializeToString(doc);
+  }
+  
+  var foo = push(root, 'foo', { id: 4 }, 'HI');
+  var bar = push(root, 'bar', { nothing: 0 });
+  var foo = push(bar, 'foo', { id: 5 }, 'NOOO');
+  
+  console.log(serialize());
+</script>
+</html>
