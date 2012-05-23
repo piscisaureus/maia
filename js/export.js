@@ -78,7 +78,7 @@ function XMLHelper() {
 }
 
 function exportXML(download) {
-  var exportCollections = ['roles', 'agents', 'institutions', 'components', 'actionSituations', 'actions', 'domainProblemVariables', 'roleEnactments', 'validationVariables'];
+  var exportCollections = ['agents', 'roles', 'institutions', 'components', 'actionSituations', 'actions', 'roleEnactments', 'validationVariables', 'domainProblemVariables'];
   var xml = new XMLHelper();
 
   for (var i = 0; i < exportCollections.length; i++) {
