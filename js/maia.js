@@ -1,4 +1,31 @@
 $(function() {
+  // Process a "load" url or fetch from local storage.
+  // Hack: do this before rendering the views.
+  var result = window.location.hash.match(/^#load=(\w+)/i);
+  if (result) {
+    setTimeout(function() {
+      var modelId = result[1];
+      var load = confirm('It looks like you want to load a model. If you are working on another model, it will be overwritten.\n\nDo you really want to load this model?');
+      if (!load) {
+        fetchFromLocalStorage();
+      } else {
+        $.ajax({url: 'load.php?id=' + modelId, dataType: 'json'})
+          .success(function(data) {
+            loadModel(data);
+            // Hack.
+            window.location.hash = "";
+            window.location.reload();
+          })
+          .error(function() {
+            alert("Sorry. We were unable to load your model.")
+            fetchFromLocalStorage();
+          })
+      }
+    }, 50);
+  } else {
+    fetchFromLocalStorage();
+  }
+
   RoleTableView.create();
   InstitutionTableView.create();
   DependencyNetworkView.create();
@@ -21,6 +48,22 @@ $(function() {
   $('#exportxml').click(function() { exportXML(false); });
   $('#exportxmldownload').click(function() { exportXML(true); });
 
+  // Bind the save button
+  $('#savemodel').click(function() {
+    var model = saveInfos.get(0);
+    if (!model) {
+      model = new SaveInfo();
+      saveInfos.add(model);
+      model.save();
+    }
+    var dialog = new SaveDialogView({
+      model: model
+    });
+    dialog.bind('save', function() {
+      saveModel(model.get('email'), model.get('description'));
+    });
+  });
+
   // Set up backbone router
   var Workspace = Backbone.Router.extend({
     routes: {
@@ -28,6 +71,9 @@ $(function() {
     },
 
     show: function(structure) {
+      if (/^load=/i.test(structure)) {
+        structure = 'about';
+      }
       $('.contentArea').hide();
       console.log(structure);
       $('#' + (structure || 'about')).show();
