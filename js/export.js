@@ -2,7 +2,9 @@
 function XMLHelper() {
   var NS = 'http://eeni.tbm.tudelft.nl/maia',
       doc = document.implementation.createDocument(NS, 'xml', null),
-      root = doc.documentElement;
+      root = doc.documentElement,
+      mappedIds = {},
+      nextId = 0;
   
   var getRoot = this.getRoot = function() {
     return root; 
@@ -74,6 +76,18 @@ function XMLHelper() {
       setText(node, '' + json);
     }
     return node;
+  };
+  
+  var mapId = this.mapId = function(id) {
+    id = +id;
+    if (isNaN(id)) {
+      return nextId++;
+    }
+    if (mappedIds.hasOwnProperty(id)) {
+      return mappedIds[id];
+    } else {
+      return mappedIds[id] = nextId++;
+    }
   };
 }
 
