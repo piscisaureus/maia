@@ -446,6 +446,123 @@ $(function() {
       this.model.save(kv(this.field, $(this.el).find('option:selected').val()));
     }
   });
+
+  window.RemoteMergingSelect = Widget.extend({
+    /*
+     * Options:
+     *   * model
+     *   * sources (array)
+     *     `sources` contains objects with these fields:
+     *     - field
+     *     - optionLabelField (string)
+     *     - optionCollection (string)
+     *   * multiple (boolean)
+     */
+    render: function() {
+      this.el = $('<select />').attr({
+        'class': 'multi-select'
+      }).appendTo(this.parent);
+      if (this.multiple) {
+        this.el.attr({
+          multiple: 'multiple'
+        });
+      }
+
+      this.update();
+      this._bind();
+    },
+
+    _getOptionCollection: function(collection) {
+      return (typeof collection !== 'string') ? collection : window[collection]
+    },
+
+    update: function() {
+      var self = this,
+          sources = this.sources;
+
+      $(this.el).empty();
+
+      if (!this.multiple && !this.required) {
+        var option = $('<option/>').attr({
+          value: "_empty"
+        }).appendTo(self.el);
+        option.text("-");
+      }
+
+      for (var i = 0; i < sources.length; i++) {
+        var source = sources[i],
+            field = source.field,
+            selected = this.model.get(field);
+
+        this._getOptionCollection(source.optionCollection).each(function(model) {
+          var label = (model.get(source.optionLabelField) || '').replace(/^\s+|\s+$/g, '');
+          if (!label) return;
+          var option = $('<option/>').attr({
+            value: i + '#' + model.get('id')
+          }).appendTo(self.el);
+          option.text(label);
+        });
+
+        for (var id in selected) {
+          if (selected.hasOwnProperty(id)) {
+            $(this.el).find('option[value="' + i + '#' + id + '"]').attr({
+              selected: 'selected'
+            });
+          }
+        }
+      }
+
+      if (!this._multiselectRendered) {
+        $(this.el).multiselect({
+          'minWidth': '150',
+          selectedList: 1,
+          header: false,
+          noneSelectedText: 'Choose',
+          multiple: this.multiple
+        });
+        this._multiselectRendered = true;
+      } else {
+        $(this.el).multiselect("refresh");
+      }
+    },
+
+    _bind: function() {
+      for (var i = 0; i < this.sources.length; i++) {
+        var source = this.sources[i];
+        $(this.el).change(this._triggerChange);
+        this.model.bind('change:' + source.field, this.deferredUpdate);
+        this._getOptionCollection(source.optionCollection).bind('change', this.deferredUpdate);
+      }
+    },
+
+    _unbind: function() {
+      for (var i = 0; i < this.sources.length; i++) {
+        var source = this.sources[i];
+        this.model.unbind('change:' + source.field, this.deferredUpdate);
+        this._getOptionCollection(source.optionCollection).unbind('change', this.deferredUpdate);
+      }
+    },
+
+    _save: function() {
+      var self = this;
+      $(this.el).find('option').each(function(index, el) {
+        var value = $(el).val();
+        if (value === '_empty') return;
+
+        var parts = /^(.*)#(.*)$/.exec(value);
+        if (!parts) return;
+
+        var sourceIndex = parts && parts[1],
+            id = parts && parts[2];
+            source = self.sources[sourceIndex],
+            item = self._getOptionCollection(source.optionCollection).get(id);
+        if (!item) return;
+
+        var method = 'set' + source.field[0].toUpperCase() + source.field.slice(1).replace(/s$/, '');
+        self.model[method](item, $(el).attr('selected') ? {} : null);
+      });
+    }
+  });
 });
 
 $(function() {
