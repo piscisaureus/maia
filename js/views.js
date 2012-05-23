@@ -350,7 +350,7 @@ $(function() {
       $(this.el).find('option').each(function(index, el) {
         var id = $(el).val();
 
-        if (id === '_new') {
+        if (id === '_new' || id === '_empty') {
           return;
         }
 
