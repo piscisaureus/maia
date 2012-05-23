@@ -1,3 +1,0 @@
-Options -Indexes
-DirectoryIndex index.html
-php_flag magic_quotes_gpc Off
