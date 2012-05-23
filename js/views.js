@@ -362,7 +362,7 @@ $(function() {
     }
   });
 
-  window.RemoteSelectFromMany = Widget.extend({
+  window.SelectFromMultipleTextSources = Widget.extend({
 
     render: function() {
       this.el = $('<select />').attr({
@@ -1217,7 +1217,7 @@ $(function() {
     })
   }, {
     label: 'Action body',
-    widget: RemoteSelectFromMany.extend({
+    widget: SelectFromMultipleTextSources.extend({
       multiple: false,
       field: 'body',
       sources: [{
