@@ -1206,8 +1206,8 @@ $(function() {
           return;
         };
         args.node.model.save({
-          x: args.x,
-          y: args.y
+          dependencies_x: args.x,
+          dependencies_y: args.y
         });
       });
 
@@ -1241,8 +1241,8 @@ $(function() {
         g.addNode(role.get('id'), {
           model: role,
           label: role.get('label'),
-          layoutPosX: role.get('x'),
-          layoutPosY: role.get('y'),
+          layoutPosX: role.get('dependencies_x'),
+          layoutPosY: role.get('dependencies_y'),
           color: color
         });
       });
@@ -1310,8 +1310,8 @@ $(function() {
           return;
         };
         args.node.model.save({
-          x: args.x,
-          y: args.y
+          composition_x: args.x,
+          composition_y: args.y
         });
       });
 
@@ -1335,8 +1335,8 @@ $(function() {
         g.addNode(component.get('id'), {
           model: component,
           label: component.get('label'),
-          layoutPosX: component.get('x'),
-          layoutPosY: component.get('y'),
+          layoutPosX: component.get('composition_x'),
+          layoutPosY: component.get('composition_y'),
           color: color
         });
       });
@@ -1402,8 +1402,8 @@ $(function() {
           return;
         };
         args.node.model.save({
-          x: args.x,
-          y: args.y
+          connections_x: args.x,
+          connections_y: args.y
         });
       });
 
@@ -1437,8 +1437,8 @@ $(function() {
         g.addNode(component.get('id'), {
           model: component,
           label: component.get('label'),
-          layoutPosX: component.get('x'),
-          layoutPosY: component.get('y'),
+          layoutPosX: component.get('connections_x'),
+          layoutPosY: component.get('connections_y'),
           color: color
         });
       });
