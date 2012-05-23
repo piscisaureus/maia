@@ -43,9 +43,14 @@ function XMLHelper() {
     return serializer.serializeToString(doc);
   };
   
-  var download = this.download = function() {
-    var dataUri = 'data:application/xml;charset=utf-8,' + encodeURIComponent(serialize());
-    window.open(dataUri);
+  var download = this.download = function(force) {
+    if (force) {
+      var mime = "application/binary";
+    } else {
+      var mime = "application/xml";
+    }
+    var dataUri = 'data:' + mime + ';charset=utf-8,' + encodeURIComponent(serialize());
+    window.open(dataUri, "model.xml");
   };
   
   var pushJson = this.pushJson = function(parent, tagName, json, itemTagName) {
@@ -72,7 +77,7 @@ function XMLHelper() {
   };
 }
 
-function exportXML() {
+function exportXML(download) {
   var exportCollections = ['roles', 'agents', 'institutions', 'components', 'actionSituations', 'actions', 'domainProblemVariables', 'roleEnactments', 'validationVariables'];
   var xml = new XMLHelper();
 
@@ -92,5 +97,5 @@ function exportXML() {
     }
   }
   
-  xml.download();
+  xml.download(download);
 }
