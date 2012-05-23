@@ -363,7 +363,7 @@ Graph.Renderer.Raphael.prototype = {
         }
         edge.connection.draw();
         
-        if (edge.connection.label) {
+        if (edge.connection.label && edge.style.editable) {
        edge.connection.label.click(function() {
          var bbox = edge.connection.label.getBBox(),
              el = $(self.element),
