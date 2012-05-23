@@ -87,7 +87,7 @@ $(function() {
       addMethods(model2, collection2, field2, model1, collection1, field1);
     }
   }
-  
+
   function relationsToXML(xml, parent, tagName, itemTagName, map) {
     var listNode = xml.push(parent, tagName);
     for (var id in map) {
@@ -102,7 +102,7 @@ $(function() {
       }
     }
   }
-  
+
   function firstRelationToXML(xml, parent, tagName, map) {
     var node = xml.push(parent, tagName);
     for (var id in map) {
@@ -111,7 +111,7 @@ $(function() {
       }
     }
   }
-  
+
   function listToXML(xml, parent, tagName, itemTagName, items) {
     var listNode = xml.push(parent, tagName);
     if (!items) {
@@ -131,7 +131,7 @@ $(function() {
       this._destroyHandlers[i].call(this);
       return Backbone.Model.prototype.destroy.call(this);
     },
-    
+
     toXML: function(xml, parent) {
       xml.pushJson(parent, 'model', this.toJSON());
     }
@@ -169,7 +169,7 @@ $(function() {
       }
       return 'Norm';
     },
-    
+
     toXML: function(xml, parent) {
       var node = xml.push(parent, 'role', { id: xml.mapId(this.get('id')) });
       xml.push(node, 'label', {}, this.get('label'));
@@ -196,7 +196,7 @@ $(function() {
       checkLabel(this, warnings);
       return warnings;
     },
-    
+
     toXML: function(xml, parent) {
       var node = xml.push(parent, 'role', { id: xml.mapId(this.get('id')) });
       xml.push(node, 'label', {}, this.get('label'));
@@ -224,7 +224,7 @@ $(function() {
       checkLabel(this, warnings);
       return warnings;
     },
-    
+
     toXML: function(xml, parent) {
       var node = xml.push(parent, 'agent', { id: xml.mapId(this.get('id')) });
       xml.push(node, 'label', {}, this.get('label'));
@@ -256,7 +256,7 @@ $(function() {
       checkLabel(this, warnings);
       return warnings;
     },
-    
+
     toXML: function(xml, parent) {
       var node = xml.push(parent, 'component', { id: xml.mapId(this.get('id')) });
       xml.push(node, 'label', {}, this.get('label'));
@@ -282,7 +282,7 @@ $(function() {
     warnings: function() {
       return [];
     },
-    
+
     toXML: function(xml, parent) {
       var node = xml.push(parent, 'action', { id: xml.mapId(this.get('id')) });
       firstRelationToXML(xml, node, "action_situation", this.get('action_situation'));
@@ -311,7 +311,7 @@ $(function() {
       checkLabel(this, warnings);
       return warnings;
     },
-    
+
     toXML: function(xml, parent) {
       var node = xml.push(parent, 'action_situation', { id: xml.mapId(this.get('id')) });
       xml.push(node, 'label', {}, this.get('label'));
@@ -329,7 +329,7 @@ $(function() {
       checkLabel(this, warnings);
       return warnings;
     },
-    
+
     toXML: function(xml, parent) {
       var node = xml.push(parent, 'validation_variable', { id: xml.mapId(this.get('id')) });
       xml.push(node, 'label', {}, this.get('label'));
@@ -348,7 +348,7 @@ $(function() {
       checkLabel(this, warnings);
       return warnings;
     },
-    
+
     toXML: function(xml, parent) {
       var node = xml.push(parent, 'domain_problem_variable', { id: xml.mapId(this.get('id')) });
       xml.push(node, 'label', {}, this.get('label'));
@@ -369,13 +369,13 @@ $(function() {
 
     warnings: function() {
     },
-    
+
     toXML: function(xml, parent) {
       var node = xml.push(parent, 'role_enactment', { id: xml.mapId(this.get('id')) });
       firstRelationToXML(xml, node, "agent", this.get('agent'));
       firstRelationToXML(xml, node, "action_situation", this.get('action_situation'));
       firstRelationToXML(xml, node, "role", this.get('role'));
-    }  
+    }
   });
 
   defineRelationship(RoleEnactment, 'roleEnactments', 'agent', Agent, 'agents', 'role_enactments');
